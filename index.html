@@ -222,8 +222,8 @@ footer { text-align: center; color: var(--ink-soft); font-size: .85rem; margin-t
 .identity-lockup { direction: ltr; display: flex; align-items: center; justify-content: center; gap: clamp(12px, 2.5vw, 20px); width: max-content; max-width: 100%; margin-inline: auto; }
 .identity-text { text-align: center; min-width: 0; }
 .identity-text .name { font-size: clamp(1.5rem, 5vw, 2.65rem); line-height: 1.12; white-space: nowrap; }
-.identity-text .role { text-align: left; margin: 5px 0 0; width: 100%; font-size: clamp(.68rem, 1.8vw, .9rem); line-height: 1.35; font-weight: 400; white-space: nowrap; contain: inline-size; }
-.identity-text .role .en { display: inline-block; letter-spacing: .08em; }
+.identity-text .role { text-align: center; margin: 5px 0 0; width: 100%; font-size: clamp(.68rem, 1.8vw, .9rem); line-height: 1.35; font-weight: 400; white-space: nowrap; }
+.identity-text .role .en { display: inline-block; letter-spacing: .065em; }
 .identity-text .role .ar { display: inline-block; direction: rtl; }
 .brand-mark { display: block; width: clamp(54px, 12vw, 82px); flex: none; }
 .brand-mark img, .brand-mark svg { display: block; width: 100%; height: auto; }
@@ -501,29 +501,6 @@ html[data-theme="dark"] #sky { filter: blur(22px); }
   var saved = null; try { saved = localStorage.getItem('portfolio-lang'); } catch (e) {}
   setLang(saved === 'ar' ? 'ar' : 'en');
   document.getElementById('langBtn').addEventListener('click', function () { setLang(root.lang === 'ar' ? 'en' : 'ar'); });
-
-  // Measure layout widths, unaffected by reveal animation transforms.
-  var lockupName = document.querySelector('.identity-text .name');
-  var lockupRole = document.querySelector('.identity-text .role');
-  function fitLockupRole() {
-    var span = lockupRole.querySelector(root.lang === 'ar' ? '.ar' : '.en');
-    span.style.letterSpacing = '0px';
-    span.style.transform = '';
-    span.style.transformOrigin = 'left center';
-    var target = lockupName.offsetWidth;
-    var natural = span.offsetWidth;
-    if (!target || !natural) return;
-    if (root.lang === 'ar') { return; }
-    var count = span.textContent.length;
-    span.style.letterSpacing = ((target - natural) / count) + 'px';
-    var actual = span.offsetWidth;
-    span.style.letterSpacing = ((target - natural + target - actual) / count) + 'px';
-  }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLockupRole);
-  window.addEventListener('resize', fitLockupRole);
-  if ('ResizeObserver' in window) new ResizeObserver(fitLockupRole).observe(lockupName);
-  document.getElementById('langBtn').addEventListener('click', fitLockupRole);
-  fitLockupRole();
 
   // Share: copy link
   var toast = document.getElementById('toast'), tt;
