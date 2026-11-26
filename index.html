@@ -269,6 +269,28 @@ html[data-theme="dark"] .hero-stop-end { stop-color: #E6FAF8; }
 html[data-theme="dark"] .theme-toggle .theme-moon { display: none; }
 html[data-theme="dark"] .theme-toggle .theme-sun { display: block; }
 html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2); }
+
+/* Responsive portfolio tabs: the original vertical reading order stays on phones. */
+.portfolio-tabs { display: none; }
+.project-panel { display: grid; gap: 22px; min-width: 0; }
+@media (min-width: 768px) {
+  .js main { max-width: 1040px; }
+  .js .portfolio-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 6px; margin: 0 auto 24px; width: fit-content; max-width: 100%; border: 1px solid rgba(15,76,92,.18); border-radius: 18px; background: var(--blush-2); }
+  .portfolio-tabs button { font: 500 .95rem var(--font); padding: 10px 15px; border: 1px solid transparent; border-radius: 12px; background: transparent; color: var(--ink); cursor: pointer; transition: background .2s, color .2s; white-space: nowrap; }
+  .portfolio-tabs button:hover { background: var(--blush-deep); }
+  .portfolio-tabs button[aria-selected="true"] { background: var(--ink); color: var(--on-ink); }
+  html[data-theme="dark"] .portfolio-tabs { background: #152D38; border-color: #31535D; }
+  html[data-theme="dark"] .portfolio-tabs button { color: #CDE6E6; }
+  html[data-theme="dark"] .portfolio-tabs button:hover { background: #203F4B; }
+  html[data-theme="dark"] .portfolio-tabs button[aria-selected="true"] { background: var(--mint); color: var(--mint-ink); }
+  .js .stack > [hidden] { display: none !important; }
+  .js .project-panel { grid-template-columns: repeat(2,minmax(0,1fr)); align-items: stretch; }
+  .js .project-panel .proj { display: flex; flex-direction: column; }
+  .js .project-panel .proj .foot { flex: 1; align-items: center; padding: 18px 20px; }
+  .js .project-panel .proj .art { flex: none; }
+  .js .project-panel .proj .foot h3 { font-size: 1.25rem; }
+}
+@media (max-width: 767px) { .project-panel { display: contents; } }
 </style>
 </head>
 <body>
@@ -318,7 +340,16 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
     <p><span class="status-dot" aria-hidden="true"></span><span class="en">Open to full-time roles and freelance projects</span><span class="ar">متاحة للعمل بدوام كامل وللمشاريع الحرّة</span></p>
   </div>
 
-  <div class="stack">
+  <div class="portfolio-tabs" id="portfolioTabs" role="tablist" aria-label="Portfolio sections / أقسام الأعمال">
+    <button type="button" role="tab" id="tab-projects" aria-controls="projects" aria-selected="true" tabindex="0"><span class="en">Projects</span><span class="ar">المشاريع</span></button>
+    <button type="button" role="tab" id="tab-about" aria-controls="about" aria-selected="false" tabindex="-1"><span class="en">About</span><span class="ar">عني</span></button>
+    <button type="button" role="tab" id="tab-work" aria-controls="work" aria-selected="false" tabindex="-1"><span class="en">Experience</span><span class="ar">الخبرة</span></button>
+    <button type="button" role="tab" id="tab-skills" aria-controls="skills" aria-selected="false" tabindex="-1"><span class="en">Skills</span><span class="ar">المهارات</span></button>
+    <button type="button" role="tab" id="tab-education" aria-controls="education" aria-selected="false" tabindex="-1"><span class="en">Education</span><span class="ar">التعليم</span></button>
+    <button type="button" role="tab" id="tab-contact" aria-controls="contact" aria-selected="false" tabindex="-1"><span class="en">Contact</span><span class="ar">التواصل</span></button>
+  </div>
+  <div class="stack" id="portfolioPanels">
+    <section class="project-panel" id="projects">
     <!-- Projects -->
     <a class="card proj reveal" href="https://almohtaref-company-ui.pages.dev/ar">
       <div class="art" aria-hidden="true">
@@ -381,6 +412,7 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
 
 
 
+    </section>
     <!-- About -->
     <section class="card card-pad about reveal" id="about">
       <h3 class="card-title"><span class="en">About me</span><span class="ar">عني</span></h3>
@@ -568,6 +600,52 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
     size(); window.addEventListener('resize', size);
     requestAnimationFrame(frame);
   })();
+  // Tabs are enabled only on tablet/desktop; all content stays visible on mobile.
+  (function () {
+    if (!window.matchMedia) return;
+    var media = matchMedia('(min-width: 768px)');
+    var tablist = document.getElementById('portfolioTabs');
+    var tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+    var panels = tabs.map(function (tab) { return document.getElementById(tab.getAttribute('aria-controls')); });
+    var active = 0;
+    function syncTabs() {
+      var wide = media.matches;
+      tabs.forEach(function (tab, i) {
+        tab.setAttribute('aria-selected', String(i === active));
+        tab.tabIndex = i === active ? 0 : -1;
+        var panel = panels[i];
+        panel.hidden = wide && i !== active;
+        if (wide) {
+          panel.setAttribute('role', 'tabpanel');
+          panel.setAttribute('aria-labelledby', tab.id);
+          if (i === active) {
+            if (panel.classList.contains('reveal')) panel.classList.add('in');
+            panel.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+          }
+        } else {
+          panel.removeAttribute('role');
+          panel.removeAttribute('aria-labelledby');
+        }
+      });
+    }
+    function select(i, focus) { active = i; syncTabs(); if (focus) tabs[i].focus(); }
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { select(i, false); });
+      tab.addEventListener('keydown', function (e) {
+        var rtl = root.dir === 'rtl', next = i;
+        if (e.key === 'ArrowRight') next += rtl ? -1 : 1;
+        else if (e.key === 'ArrowLeft') next += rtl ? 1 : -1;
+        else if (e.key === 'Home') next = 0;
+        else if (e.key === 'End') next = tabs.length - 1;
+        else return;
+        e.preventDefault(); select((next + tabs.length) % tabs.length, true);
+      });
+    });
+    if (media.addEventListener) media.addEventListener('change', syncTabs);
+    else media.addListener(syncTabs);
+    syncTabs();
+  })();
+
   // Reveal on load and on scroll
   var items = document.querySelectorAll('.reveal');
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
