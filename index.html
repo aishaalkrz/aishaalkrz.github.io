@@ -94,14 +94,16 @@ html[lang="ar"] .headline h2 { letter-spacing: 0; }
 }
 .card::before {
   content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .35s;
-  background: radial-gradient(380px circle at var(--mx) var(--my), rgba(255,255,255,.55), transparent 60%);
+  background: radial-gradient(340px circle at var(--mx) var(--my), rgba(46,196,182,.08), transparent 70%);
 }
 .card:hover::before { opacity: 1; }
+.card:hover { border-color: rgba(46,196,182,.48); }
+.card { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s; }
 .card-pad { padding: 28px 30px; }
 .card h3.card-title { font-size: 1.45rem; font-weight: 700; margin-bottom: 14px; letter-spacing: -.01em; }
 
 .proj { display: block; text-decoration: none; background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
-.proj::before { background: radial-gradient(380px circle at var(--mx) var(--my), rgba(46,196,182,.16), transparent 60%); }
+.proj::before { background: radial-gradient(380px circle at var(--mx) var(--my), rgba(46,196,182,.10), transparent 70%); }
 .proj:hover { transform: translateY(-4px); box-shadow: 0 30px 50px -26px rgba(15,76,92,.75); }
 .proj .art { height: 210px; display: grid; place-items: center; position: relative; background: var(--ink-2); }
 .proj .foot { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 28px; }
