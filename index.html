@@ -269,6 +269,21 @@ html[data-theme="dark"] .hero-stop-end { stop-color: #E6FAF8; }
 html[data-theme="dark"] .theme-toggle .theme-moon { display: none; }
 html[data-theme="dark"] .theme-toggle .theme-sun { display: block; }
 html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2); }
+/* Arabic layout: preserve connected letterforms and isolate Latin technical terms. */
+html[lang="ar"] body { line-height: 1.9; }
+html[lang="ar"] .identity-text { direction: rtl; text-align: center; }
+html[lang="ar"] .identity-text .name { line-height: 1.45; letter-spacing: normal; }
+html[lang="ar"] .identity-text .role { text-align: center; line-height: 1.65; contain: none; letter-spacing: normal; }
+html[lang="ar"] .identity-text .role .ar { letter-spacing: normal !important; transform: none !important; }
+html[lang="ar"] .card-pad, html[lang="ar"] .proj .foot { text-align: right; }
+html[lang="ar"] .contact { text-align: center; }
+html[lang="ar"] .card h3.card-title, html[lang="ar"] .proj .foot h3 { letter-spacing: normal; line-height: 1.65; }
+html[lang="ar"] .headline h2 { line-height: 1.5; }
+html[lang="ar"] .proj .foot p, html[lang="ar"] .about p, html[lang="ar"] .tl-item li, html[lang="ar"] .edu p { line-height: 1.9; }
+html[lang="ar"] .tag, html[lang="ar"] .chip { direction: ltr; unicode-bidi: isolate; }
+html[lang="ar"] .edu-date { unicode-bidi: isolate; }
+html[lang="ar"] .proj .foot > div { min-width: 0; }
+html[data-theme="light"] #sky { filter: blur(42px); }
 </style>
 </head>
 <body>
@@ -340,7 +355,7 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
       <div class="foot">
         <div>
           <h3><span class="en">Basira</span><span class="ar">بصيرة</span></h3>
-          <p><span class="en">Upload Excel or CSV, get KPIs, charts and AI-written business insights.</span><span class="ar">ارفع ملف Excel أو CSV واحصل على مؤشرات ومخططات ورؤى بالذكاء الاصطناعي.</span></p>
+          <p><span class="en">Upload Excel or CSV, get KPIs, charts and AI-written business insights.</span><span class="ar">ارفع ملفات <bdi dir="ltr">Excel</bdi> أو <bdi dir="ltr">CSV</bdi> للحصول على مؤشرات أداء ومخططات وتحليلات بالذكاء الاصطناعي.</span></p>
           <div class="tags"><span class="tag">Angular</span><span class="tag">TypeScript</span><span class="tag">D3.js</span><span class="tag">FastAPI</span><span class="tag">Pandas</span></div>
         </div>
         <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
@@ -384,8 +399,8 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
     <!-- About -->
     <section class="card card-pad about reveal" id="about">
       <h3 class="card-title"><span class="en">About me</span><span class="ar">عني</span></h3>
-      <p><span class="en">Software engineer with 3+ years of web development, working across the stack with C#, ASP.NET Core, Angular, TypeScript, SQL Server and REST APIs.</span><span class="ar">مهندسة برمجيات بخبرة تزيد عن 3 سنوات في تطوير الويب، أعمل على الواجهات والخوادم باستخدام C# و ASP.NET Core و Angular و TypeScript و SQL Server و REST APIs.</span></p>
-      <p><span class="en">I build reusable components, connect frontends to backends cleanly, and have taught advanced C# to university students.</span><span class="ar">أبني مكوّنات قابلة لإعادة الاستخدام، وأربط الواجهات بالخوادم بشكل منظّم، ودرّستُ C# المتقدّمة لطلاب الجامعة.</span></p>
+      <p><span class="en">Software engineer with 3+ years of web development, working across the stack with C#, ASP.NET Core, Angular, TypeScript, SQL Server and REST APIs.</span><span class="ar">مهندسة برمجيات بخبرة تزيد على ثلاث سنوات في تطوير تطبيقات الويب، أعمل على تطوير الواجهات الأمامية والخلفية باستخدام <bdi dir="ltr">C#</bdi> و<bdi dir="ltr">ASP.NET Core</bdi> و<bdi dir="ltr">Angular</bdi> و<bdi dir="ltr">TypeScript</bdi> و<bdi dir="ltr">SQL Server</bdi>، وربطها عبر واجهات <bdi dir="ltr">REST API</bdi>.</span></p>
+      <p><span class="en">I build reusable components, connect frontends to backends cleanly, and have taught advanced C# to university students.</span><span class="ar">أطوّر مكوّنات قابلة لإعادة الاستخدام، وأربط الواجهات بالخوادم بطريقة منظّمة، كما درّستُ البرمجة المتقدّمة بلغة <bdi dir="ltr">C#</bdi> لطلاب الجامعة.</span></p>
     </section>
 
     <!-- Experience -->
@@ -393,7 +408,7 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
       <h3 class="card-title"><span class="en">Experience</span><span class="ar">الخبرة</span></h3>
       <div class="tl">
         <div class="tl-item">
-          <h4><span class="en">Software Developer</span><span class="ar">مطوّرة برمجيات</span> <span class="where">· BluLogix</span></h4>
+          <h4><span class="en">Software Developer</span><span class="ar">مطوّرة برمجيات</span> <span class="where">· <bdi dir="ltr">BluLogix</bdi></span></h4>
           <div class="when"><span class="en">Jul 2024 – Jun 2026</span><span class="ar">تموز 2024 – حزيران 2026</span></div>
           <ul class="en">
             <li>Built interactive dashboards, data visualizations and dynamic filters in Angular.</li>
@@ -402,17 +417,17 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
             <li>Integrated REST APIs and improved performance in an Agile team.</li>
           </ul>
           <ul class="ar">
-            <li>بناء لوحات تحكّم تفاعلية وعروض بيانات وفلاتر ديناميكية بـ Angular.</li>
+            <li>تطوير لوحات تحكّم تفاعلية، وعرض البيانات بصرياً، وإنشاء فلاتر ديناميكية باستخدام <bdi dir="ltr">Angular</bdi>.</li>
             <li>العمل على أداة بناء لوحات التحكّم وأداة بناء المخططات.</li>
             <li>إنشاء مكوّنات واجهة قابلة لإعادة الاستخدام ووحدات مشتركة.</li>
-            <li>ربط REST APIs وتحسين الأداء ضمن فريق Agile.</li>
+            <li>ربط واجهات <bdi dir="ltr">REST API</bdi> وتحسين الأداء ضمن فريق يعمل بمنهجية <bdi dir="ltr">Agile</bdi>.</li>
           </ul>
         </div>
         <div class="tl-item">
-          <h4><span class="en">C# Instructor</span><span class="ar">مدرّبة C#</span></h4>
+          <h4><span class="en">C# Instructor</span><span class="ar">مدرّبة لغة <bdi dir="ltr">C#</bdi></span></h4>
           <div class="when"><span class="en">University Training Program</span><span class="ar">برنامج تدريب جامعي</span></div>
           <ul class="en"><li>Taught an advanced C# course: OOP, data structures, async programming.</li></ul>
-          <ul class="ar"><li>تدريس دورة C# متقدّمة: البرمجة كائنية التوجّه، هياكل البيانات، البرمجة غير المتزامنة.</li></ul>
+          <ul class="ar"><li>تدريس دورة متقدّمة في لغة <bdi dir="ltr">C#</bdi> تشمل البرمجة كائنية التوجّه، وهياكل البيانات، والبرمجة غير المتزامنة.</li></ul>
         </div>
       </div>
     </section>
@@ -437,15 +452,15 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
         <div><h4><span class="en">B.Sc. Informatics Engineering</span><span class="ar">بكالوريوس هندسة المعلوماتية</span></h4>
           <p><span class="en">International University for Science &amp; Renaissance</span><span class="ar">الجامعة الدولية للعلوم والنهضة</span></p>
           <p class="edu-date">2020 – 2025</p></div>
-        <div><h4><span class="en">Full Stack Diploma</span><span class="ar">دبلوم Full Stack</span></h4>
-          <p><span class="en">Midad · .NET, C#, Angular</span><span class="ar">مداد · ‎.NET و C# و Angular</span></p>
+        <div><h4><span class="en">Full Stack Diploma</span><span class="ar">دبلوم تطوير الويب المتكامل</span></h4>
+          <p><span class="en">Midad · .NET, C#, Angular</span><span class="ar">مداد · <bdi dir="ltr">.NET</bdi> و<bdi dir="ltr">C#</bdi> و<bdi dir="ltr">Angular</bdi></span></p>
           <p class="edu-date"><span class="en">Jan – Nov 2023</span><span class="ar">كانون الثاني – تشرين الثاني 2023</span></p></div>
       </div>
     </section>
 
     <!-- Contact -->
     <section class="card card-pad contact reveal" id="contact">
-      <h3 class="card-title"><span class="en">Let's work together</span><span class="ar">لنعمل معاً</span></h3>
+      <h3 class="card-title"><span class="en">Let's work together</span><span class="ar">لنعمل معًا</span></h3>
       <a class="mail" href="mailto:aishaalkrz@gmail.com">aishaalkrz@gmail.com</a>
     </section>
   </div>
@@ -497,10 +512,7 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
     var target = lockupName.offsetWidth;
     var natural = span.offsetWidth;
     if (!target || !natural) return;
-    if (root.lang === 'ar') {
-      span.style.transform = 'scaleX(' + target / natural + ')';
-      return;
-    }
+    if (root.lang === 'ar') { return; }
     var count = span.textContent.length;
     span.style.letterSpacing = ((target - natural) / count) + 'px';
     var actual = span.offsetWidth;
@@ -539,12 +551,19 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
     var c = document.getElementById('sky'), x = c.getContext('2d');
     var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     var W, H, dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    var orbs = [
+    var darkOrbs = [
       { c: '255,255,255', r: .36, a: .70, sx: .00011, sy: .00017, px: 0,   py: 1.2, ox: .25, oy: .2 },
       { c: '184,229,224', r: .34, a: .55, sx: .00015, sy: .00009, px: 2.1, py: .4,  ox: .75, oy: .3 },
       { c: '46,196,182',  r: .20, a: .22, sx: .00019, sy: .00013, px: 4.0, py: 2.6, ox: .6,  oy: .75 },
       { c: '245,252,251', r: .40, a: .80, sx: .00008, sy: .00014, px: 1.3, py: 5.1, ox: .2,  oy: .8 },
       { c: '112,190,185', r: .22, a: .35, sx: .00023, sy: .00021, px: 3.3, py: .9,  ox: .5,  oy: .45 }
+    ];
+    var lightOrbs = [
+      { c: '15,76,92', r: .34, a: .25, sx: .00024, sy: .00028, px: 0, py: 1.2, ox: .18, oy: .2 },
+      { c: '46,196,182', r: .37, a: .54, sx: .00029, sy: .00022, px: 2.1, py: .4, ox: .78, oy: .3 },
+      { c: '15,76,92', r: .23, a: .20, sx: .00031, sy: .00025, px: 4, py: 2.6, ox: .6, oy: .75 },
+      { c: '112,190,185', r: .40, a: .48, sx: .00019, sy: .00023, px: 1.3, py: 5.1, ox: .2, oy: .8 },
+      { c: '46,196,182', r: .28, a: .35, sx: .00026, sy: .00031, px: 3.3, py: .9, ox: .5, oy: .45 }
     ];
     var mx = .5, my = .5, tx = .5, ty = .5;
     window.addEventListener('pointermove', function (e) { tx = e.clientX / innerWidth; ty = e.clientY / innerHeight; });
@@ -554,6 +573,7 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
       x.clearRect(0, 0, W, H);
       x.globalCompositeOperation = 'source-over';
       var m = Math.max(W, H);
+      var orbs = root.dataset.theme === 'dark' ? darkOrbs : lightOrbs;
       orbs.forEach(function (o, i) {
         var cx = (o.ox + Math.sin(t * o.sx + o.px) * .28 + (mx - .5) * (i % 2 ? .08 : -.08)) * W;
         var cy = (o.oy + Math.cos(t * o.sy + o.py) * .24 + (my - .5) * (i % 2 ? -.06 : .06)) * H;
@@ -565,8 +585,11 @@ html[data-theme="dark"] .footer-brand .brand-mark img { filter: brightness(1.2);
       });
       if (!still) requestAnimationFrame(frame);
     }
-    size(); window.addEventListener('resize', size);
-    requestAnimationFrame(frame);
+    size(); window.addEventListener('resize', function () { size(); if (still) frame(0); });
+    if (still) {
+      frame(0);
+      if ('MutationObserver' in window) new MutationObserver(function () { frame(0); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+    } else requestAnimationFrame(frame);
   })();
   // Reveal on load and on scroll
   var items = document.querySelectorAll('.reveal');
