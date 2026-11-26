@@ -208,13 +208,13 @@ footer { text-align: center; color: var(--ink-soft); font-size: .85rem; margin-t
   html { scroll-behavior: auto; }
 }
 /* Approved AK identity */
-.identity-lockup { display: flex; align-items: center; justify-content: center; gap: clamp(12px, 3vw, 24px); margin-inline: auto; }
-.identity-text { text-align: start; min-width: 0; }
+.identity-lockup { direction: ltr; display: flex; align-items: center; justify-content: center; gap: clamp(12px, 3vw, 24px); margin-inline: auto; }
+.identity-text { text-align: left; min-width: 0; }
 .identity-text .name { font-size: clamp(1.65rem, 6.1vw, 3.8rem); }
 .identity-text .role { margin-top: 6px; font-size: clamp(.95rem, 3vw, 1.25rem); }
 .brand-mark { display: block; width: clamp(64px, 15vw, 112px); flex: none; }
 .brand-mark img { display: block; width: 100%; height: auto; }
-.footer-brand { display: flex; justify-content: center; align-items: center; gap: 12px; }
+.footer-brand { direction: ltr; display: flex; justify-content: center; align-items: center; gap: 12px; }
 .footer-brand .brand-mark { width: 40px; }
 @media (max-width: 380px) { .identity-lockup { gap: 10px; } .brand-mark { width: 56px; } .identity-text .name { font-size: clamp(1.35rem, 6vw, 1.65rem); } }
 
