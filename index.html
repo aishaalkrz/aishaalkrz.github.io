@@ -235,7 +235,7 @@ footer { text-align: center; color: var(--ink-soft); font-size: .85rem; margin-t
 :focus-visible { outline-color: var(--ink); }
 html[data-theme="dark"] { color-scheme: dark; }
 html[data-theme="dark"] body { background: #0B1120; color: #E6FAF8; }
-html[data-theme="dark"] .sky { opacity: .14; }
+html[data-theme="dark"] .sky { opacity: .80; }
 html[data-theme="dark"] .card:not(.proj):not(.contact) { background: #152D38; border-color: #31535D; color: #E6FAF8; }
 html[data-theme="dark"] .name, html[data-theme="dark"] .role, html[data-theme="dark"] .headline h2, html[data-theme="dark"] .place, html[data-theme="dark"] .headline p, html[data-theme="dark"] footer, html[data-theme="dark"] .tl-item .where, html[data-theme="dark"] .tl-item .when, html[data-theme="dark"] .skill-groups h4, html[data-theme="dark"] .about p + p, html[data-theme="dark"] .tl-item ul { color: #CDE6E6; }
 html[data-theme="dark"] .name::after { color: var(--mint); }
@@ -283,7 +283,8 @@ html[lang="ar"] .proj .foot p, html[lang="ar"] .about p, html[lang="ar"] .tl-ite
 html[lang="ar"] .tag, html[lang="ar"] .chip { direction: ltr; unicode-bidi: isolate; }
 html[lang="ar"] .edu-date { unicode-bidi: isolate; }
 html[lang="ar"] .proj .foot > div { min-width: 0; }
-html[data-theme="light"] #sky { filter: blur(42px); }
+html[data-theme="light"] #sky { filter: blur(18px); }
+html[data-theme="dark"] #sky { filter: blur(22px); }
 </style>
 </head>
 <body>
@@ -546,50 +547,100 @@ html[data-theme="light"] #sky { filter: blur(42px); }
   });
 
 
-  // Moving blurred light in the background
+  // Soft, rotating fog vortex. Cached cloud sprites keep the render inexpensive.
   (function () {
-    var c = document.getElementById('sky'), x = c.getContext('2d');
-    var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var W, H, dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    var darkOrbs = [
-      { c: '255,255,255', r: .36, a: .70, sx: .00011, sy: .00017, px: 0,   py: 1.2, ox: .25, oy: .2 },
-      { c: '184,229,224', r: .34, a: .55, sx: .00015, sy: .00009, px: 2.1, py: .4,  ox: .75, oy: .3 },
-      { c: '46,196,182',  r: .20, a: .22, sx: .00019, sy: .00013, px: 4.0, py: 2.6, ox: .6,  oy: .75 },
-      { c: '245,252,251', r: .40, a: .80, sx: .00008, sy: .00014, px: 1.3, py: 5.1, ox: .2,  oy: .8 },
-      { c: '112,190,185', r: .22, a: .35, sx: .00023, sy: .00021, px: 3.3, py: .9,  ox: .5,  oy: .45 }
-    ];
-    var lightOrbs = [
-      { c: '15,76,92', r: .34, a: .25, sx: .00024, sy: .00028, px: 0, py: 1.2, ox: .18, oy: .2 },
-      { c: '46,196,182', r: .37, a: .54, sx: .00029, sy: .00022, px: 2.1, py: .4, ox: .78, oy: .3 },
-      { c: '15,76,92', r: .23, a: .20, sx: .00031, sy: .00025, px: 4, py: 2.6, ox: .6, oy: .75 },
-      { c: '112,190,185', r: .40, a: .48, sx: .00019, sy: .00023, px: 1.3, py: 5.1, ox: .2, oy: .8 },
-      { c: '46,196,182', r: .28, a: .35, sx: .00026, sy: .00031, px: 3.3, py: .9, ox: .5, oy: .45 }
-    ];
-    var mx = .5, my = .5, tx = .5, ty = .5;
-    window.addEventListener('pointermove', function (e) { tx = e.clientX / innerWidth; ty = e.clientY / innerHeight; });
-    function size() { W = c.width = Math.round(c.clientWidth * dpr / 2); H = c.height = Math.round(c.clientHeight * dpr / 2); }
-    function frame(t) {
-      mx += (tx - mx) * .03; my += (ty - my) * .03;
-      x.clearRect(0, 0, W, H);
-      x.globalCompositeOperation = 'source-over';
-      var m = Math.max(W, H);
-      var orbs = root.dataset.theme === 'dark' ? darkOrbs : lightOrbs;
-      orbs.forEach(function (o, i) {
-        var cx = (o.ox + Math.sin(t * o.sx + o.px) * .28 + (mx - .5) * (i % 2 ? .08 : -.08)) * W;
-        var cy = (o.oy + Math.cos(t * o.sy + o.py) * .24 + (my - .5) * (i % 2 ? -.06 : .06)) * H;
-        var r = o.r * m * (1 + Math.sin(t * .0004 + i) * .12);
-        var g = x.createRadialGradient(cx, cy, 0, cx, cy, r);
-        g.addColorStop(0, 'rgba(' + o.c + ',' + o.a + ')');
-        g.addColorStop(1, 'rgba(' + o.c + ',0)');
-        x.fillStyle = g; x.beginPath(); x.arc(cx, cy, r, 0, Math.PI * 2); x.fill();
-      });
-      if (!still) requestAnimationFrame(frame);
+    var c = document.getElementById('sky');
+    var x = c.getContext('2d');
+    if (!x) return;
+    var motion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)');
+    var W, H, last = 0, elapsed = 0, raf = 0;
+    var palettes = {
+      light: ['15,76,92', '46,196,182', '89,169,171', '184,229,224'],
+      dark: ['11,82,105', '26,155,159', '46,196,182', '125,215,211']
+    };
+    var sprites = {};
+    function cloud(rgb) {
+      var tile = document.createElement('canvas');
+      tile.width = tile.height = 128;
+      var g = tile.getContext('2d');
+      var fade = g.createRadialGradient(64,64,0,64,64,64);
+      fade.addColorStop(0, 'rgba('+rgb+',.85)');
+      fade.addColorStop(.34, 'rgba('+rgb+',.48)');
+      fade.addColorStop(.68, 'rgba('+rgb+',.12)');
+      fade.addColorStop(1, 'rgba('+rgb+',0)');
+      g.fillStyle = fade; g.fillRect(0,0,128,128);
+      return tile;
     }
-    size(); window.addEventListener('resize', function () { size(); if (still) frame(0); });
-    if (still) {
-      frame(0);
-      if ('MutationObserver' in window) new MutationObserver(function () { frame(0); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-    } else requestAnimationFrame(frame);
+    Object.keys(palettes).forEach(function (mode) {
+      sprites[mode] = palettes[mode].map(cloud);
+    });
+    function size() {
+      // Low resolution is intentional: soft fog needs no high-DPI raster.
+      var scale = Math.min(.65, 950 / Math.max(c.clientWidth,c.clientHeight,1));
+      W = c.width = Math.max(1,Math.round(c.clientWidth*scale));
+      H = c.height = Math.max(1,Math.round(c.clientHeight*scale));
+      draw(elapsed);
+    }
+    function draw(t) {
+      var dark = root.dataset.theme === 'dark';
+      var tiles = sprites[dark ? 'dark' : 'light'];
+      var m = Math.min(W,H);
+      var outer = Math.sqrt(W*W+H*H)*.57;
+      var cx = W*(.50+.055*Math.sin(t*.16));
+      var cy = H*(.45+.045*Math.cos(t*.13));
+      var rotation = t*.115;
+      x.clearRect(0,0,W,H);
+      x.globalCompositeOperation = 'source-over';
+      // Three curved arms, each made from overlapping soft cloud lobes.
+      // Radius-dependent twisting and breathing make the fog flow, not just spin.
+      for (var arm=0;arm<3;arm++) {
+        for (var i=31;i>=0;i--) {
+          var u=i/31;
+          var radius=m*.055+outer*Math.pow(u,1.12);
+          var theta=rotation+arm*Math.PI*2/3+u*4.7+.16*Math.sin(t*.65-u*6+arm);
+          var ripple=Math.sin(u*14-t*.8+arm*2);
+          var px=cx+Math.cos(theta)*radius;
+          var py=cy+Math.sin(theta)*radius*.82;
+          var diameter=(m*.14+outer*.34*u)*(1+.13*ripple);
+          var opacity=(.20+.13*Math.sin(u*10+arm+t*.45))*(.45+.55*Math.sin(Math.PI*u));
+          x.save();
+          x.translate(px,py); x.rotate(theta+.9);
+          x.globalAlpha=opacity*(dark?1.12:.95);
+          x.drawImage(tiles[(arm+i%2)%tiles.length],-diameter*.68,-diameter*.45,diameter*1.36,diameter*.9);
+          x.restore();
+        }
+      }
+      // Diffuse outer veil and a small, soft eye keep the spiral readable.
+      x.globalAlpha=dark?.21:.17;
+      x.drawImage(tiles[3],cx-m*.46,cy-m*.46,m*.92,m*.92);
+      x.globalAlpha=1;
+    }
+    function tick(now) {
+      raf=0;
+      if (document.hidden || (motion && motion.matches)) { last=0; return; }
+      if (!last) last=now;
+      var delta=now-last;
+      if (delta>=32) {
+        elapsed+=Math.min(delta,100)/1000;
+        last=now;
+        draw(elapsed);
+      }
+      raf=requestAnimationFrame(tick);
+    }
+    function syncMotion() {
+      if (raf) cancelAnimationFrame(raf);
+      raf=0; last=0;
+      draw(elapsed);
+      if (!document.hidden && !(motion && motion.matches)) raf=requestAnimationFrame(tick);
+    }
+    size(); syncMotion();
+    window.addEventListener('resize',size);
+    document.addEventListener('visibilitychange',syncMotion);
+    if (motion) {
+      if (motion.addEventListener) motion.addEventListener('change',syncMotion);
+      else if (motion.addListener) motion.addListener(syncMotion);
+    }
+    if ('MutationObserver' in window) new MutationObserver(function () { draw(elapsed); }).observe(root,{attributes:true,attributeFilter:['data-theme']});
   })();
   // Reveal on load and on scroll
   var items = document.querySelectorAll('.reveal');
